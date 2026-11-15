@@ -42,7 +42,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
 <section class="card"><h2>Раздел 4. Адаптация к медицинскому образованию</h2><p class="sub">Пять авторских утверждений для предварительной оценки субъективного опыта адаптации. Шкала от 1 до 5.</p><p class="small">1 — совершенно не согласен; 5 — полностью согласен.</p><div id="adapt"></div></section>
 
 <section class="card"><h2>Завершение</h2><p class="sub">После ответа на все 49 утверждений станет доступен расчёт показателей и скачивание файла с ответами.</p><div class="progress"><div id="bar"></div></div><p class="small" id="progressText">Отвечено: 0 из 49</p><button class="primary" id="calc" disabled>Рассчитать результаты</button><p id="status" class="small" role="status"></p></section>
-<section class="card result" id="results" aria-live="polite"><h2>Результаты</h2><p class="sub">Сводка по шкалам. Не является индивидуальным психологическим заключением.</p><div id="resultContent"></div><button class="secondary" id="csv">Скачать ответы и расчёты (CSV)</button><button class="secondary" id="summary">Скопировать сводку</button><p class="small">Для общего анализа соберите файлы всех участников в одну таблицу. Не интерпретируйте единичный результат как диагноз.</p></section>
+<section class="card result" id="results" aria-live="polite"><h2>Результаты</h2><p class="sub">Сводка по шкалам. Не является индивидуальным психологическим заключением.</p><div id="resultContent"></div><button class="secondary" id="csv">Скачать ответы и расчёты (CSV)</button><button class="secondary" id="summary">Скопировать сводку</button><button class="primary" id="sendBtn" style="background: #2446a6; margin-top: 10px; width: 100%; border-radius: 11px; padding: 13px; color: white; border: none; font-weight: 600; cursor: pointer;">Отправить ответы исследователю</button><p class="small">Для общего анализа соберите файлы всех участников в одну таблицу. Не интерпретируйте единичный результат как диагноз.</p></section>
 
 <section class="card"><h2>Методики и источники</h2>
 <p class="small">КДТП: Золотарёва А. А. (2018). «Краткий дифференциальный тест перфекционизма: проверка кросс-культурной устойчивости факторной структуры и психометрических характеристик». <a href="https://psyjournals.ru/journals/chp/archive/2018_n1/Zolotareva" target="_blank" rel="noopener">Статья и описание методики</a>.</p>
@@ -155,5 +155,40 @@ document.getElementById("csv").addEventListener("click",()=>{
  const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="anketa_otlichnik_bez_prava_na_oshibku.csv";a.click();URL.revokeObjectURL(u);
 });
 document.getElementById("summary").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(report);document.getElementById("status").textContent="Сводка скопирована."}catch(e){document.getElementById("status").textContent="Не удалось скопировать. Скачайте CSV."}});
-update();
+async function sendToServer() {
+  const v = vals();
+  const data = {
+    access_key: "d51ca75f-869d-4579-8af4-77ff3a926687",
+    subject: "Новый ответ на анкету",
+    age: document.getElementById('age').value,
+    course: document.getElementById('course').value,
+    program: document.getElementById('program').value,
+    P: v.slice(0, 14).join(', '),
+    E: v.slice(14, 19).join(', '),
+    C: v.slice(19, 44).join(', '),
+    A: v.slice(44, 49).join(', '),
+    results: computed.length > 0 ? JSON.stringify(computed) : 'Не рассчитано'
+  };
+
+  try {
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    const result = await response.json();
+    if (result.success) {
+      alert('Ответы успешно отправлены! Спасибо.');
+    } else {
+      alert('Ошибка: ' + result.message);
+    }
+  } catch (e) {
+    alert('Ошибка соединения. Проверьте интернет.');
+  }
+}
+
+document.getElementById('sendBtn').addEventListener('click', sendToServer);update();
 </script></body></html>
