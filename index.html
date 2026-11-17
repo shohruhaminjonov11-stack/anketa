@@ -24,8 +24,9 @@ input[type=number],input[type=text],select,textarea{width:100%;padding:11px 12px
 button{border:0;border-radius:11px;padding:13px 17px;font:600 15px system-ui;cursor:pointer}.primary{background:var(--blue);color:white;width:100%;margin-top:12px}.secondary{background:var(--soft);color:var(--blue);margin:8px 8px 0 0}
 button:disabled{opacity:.45;cursor:not-allowed}.progress{height:8px;background:#e5eaf4;border-radius:99px;overflow:hidden;margin:12px 0}.progress div{height:100%;width:0;background:#4263c7}
 .result{display:none}.stat{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line)}.stat strong{font-variant-numeric:tabular-nums;text-align:right}
+.recommendation{background:var(--soft);border-left:4px solid var(--blue);padding:15px;margin-top:20px;border-radius:8px;line-height:1.6;}
 footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
-@media(max-width:480px){main{padding:10px 9px 40px}.card{padding:15px}.scale{gap:4px}.opt span{min-height:39px;font-size:13px}.legend{font-size:10px}}
+@media(max-width:480px){main{padding:10px 9px 40px}.card{padding:15px}.scale{gap:4px}.opt span{min-height:39px;font-size:13px}.legend{font-size:10px}.stat{flex-direction:column;gap:5px}.stat strong{text-align:left}}
 </style></head>
 <body><main>
 <header><h1>Анкета</h1><p>Уважаемый студент! Мы проводим учебное исследование о том, как первокурсники-медики относятся к учёбе, ошибкам и собственным требованиям к себе.</p></header>
@@ -81,8 +82,12 @@ footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
 
 <section class="card"><h2>Завершение</h2><p class="sub">После ответа на все 20 утверждений станет доступен расчёт показателей.</p><div class="progress"><div id="bar"></div></div><p class="small" id="progressText">Отвечено: 0 из 20</p><button class="primary" id="calc" disabled>Рассчитать результаты</button><p id="status" class="small" role="status"></p></section>
 
-<section class="card result" id="results" aria-live="polite"><h2>Результаты</h2><p class="sub">Сводка по шкалам. Не является индивидуальным психологическим заключением.</p><div id="resultContent"></div>
-<button class="primary" id="sendBtn" style="background: #2446a6; margin-top: 10px;">Отправить ответы исследователю</button>
+<section class="card result" id="results" aria-live="polite">
+<h2>Результаты</h2>
+<p class="sub">Сводка по шкалам. Не является индивидуальным психологическим заключением.</p>
+<div id="resultContent"></div>
+<div id="recommendationBox" class="recommendation"></div> <!-- Блок для рекомендаций -->
+<button class="primary" id="sendBtn" style="background: #2446a6; margin-top: 15px;">Отправить ответы исследователю</button>
 <button class="secondary" id="csv">Скачать ответы (CSV)</button>
 </section>
 
@@ -136,6 +141,7 @@ function update(){
 document.addEventListener("change",update);
 
 let computed=[];
+let recText="";
 
 document.getElementById("calc").addEventListener("click",()=>{
  const v=vals();
@@ -143,9 +149,6 @@ document.getElementById("calc").addEventListener("click",()=>{
  const cSum=v.slice(10,15).reduce((a,b)=>a+b,0);
  const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
  
- // Считаем средний балл для выгорания (сумма / 5)
- const dAvg = (dSum / 5).toFixed(1).replace('.', ',');
-
  let bText=bSum<=20?"Низкий уровень":bSum<=30?"Умеренный, преимущественно «здоровый»":bSum<=40?"Выраженный, зона риска":"Высокий маладаптивный, выраженная зона риска";
  let cText=cSum<=10?"Низкий страх ошибки":cSum<=17?"Умеренный":"Высокий";
  let dText=dSum<=10?"Низкий риск":dSum<=17?"Умеренный":"Высокий риск выгорания";
@@ -153,8 +156,28 @@ document.getElementById("calc").addEventListener("click",()=>{
  computed=[
    ["Блок Б. Перфекционизм (сумма)", bSum + " — " + bText],
    ["Блок В. Страх ошибки (сумма)", cSum + " — " + cText],
-   ["Блок Г. Выгорание (сумма)", dSum + " — " + dText],
+   ["Блок Г. Выгорание (сумма)", dSum + " — " + dText]
+ ];
+
+ // Формируем рекомендации на основе баллов
+ let rec = [];
+ if (bSum >= 31) rec.push("• <b>Перфекционизм:</b> Вы предъявляете очень высокие требования к себе. Помните, что стремление к идеалу не должно разрушать ваше здоровье. Право на ошибку есть у каждого.");
+ if (cSum >= 18) rec.push("• <b>Страх ошибки:</b> Вы сильно переживаете из-за неудач. Попробуйте воспринимать ошибку не как провал, а как ценный опыт, который делает вас сильнее.");
+ if (dSum >= 18) rec.push("• <b>Выгорание:</b> У вас высокий риск эмоционального истощения. Обязательно найдите время для отдыха. Если станет тяжело, не стесняйтесь обратиться к психологу вуза.");
  
+ if (rec.length === 0) {
+   rec.push("• <b>Отличный баланс!</b> У вас низкий или умеренный уровень риска по всем шкалам. Вы хорошо справляетесь с учебной нагрузкой, продолжайте в том же духе, но не забывайте отдыхать.");
+ }
+ 
+ // Благодарность за открытые ответы
+ const hasOpenAnswers = document.getElementById('open1').value || document.getElementById('open2').value || document.getElementById('open3').value;
+ if (hasOpenAnswers) {
+   rec.push("<br>• Спасибо за ваши развернутые ответы в блоке Д. Ваша рефлексия помогает лучше понять учебный процесс!");
+ }
+
+ recText = rec.join("<br><br>");
+ document.getElementById("recommendationBox").innerHTML = "<b>Рекомендации:</b><br><br>" + recText;
+
  document.getElementById("resultContent").innerHTML=computed.map(([n,x])=>`<div class="stat"><span>${n}</span><strong>${x}</strong></div>`).join("");
  document.getElementById("results").style.display="block";
  document.getElementById("status").textContent="Расчёт завершён.";
@@ -167,7 +190,7 @@ async function sendToServer() {
   const bSum=v.slice(0,10).reduce((a,b)=>a+b,0);
   const cSum=v.slice(10,15).reduce((a,b)=>a+b,0);
   const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
-  const dAvg = (dSum / 5).toFixed(1).replace('.', ','); // <-- Средний балл выгорания
+  const dAvg = (dSum / 5).toFixed(1).replace('.', ','); // Средний балл выгорания для исследователя
 
   const data = {
     access_key: "d51ca75f-869d-4579-8af4-77ff3a926687",
@@ -183,10 +206,11 @@ async function sendToServer() {
     "Сумма В": cSum,
     "Блок Г (Выгорание)": v.slice(15, 20).join(', '),
     "Сумма Г": dSum,
-    "Средний балл Г": dAvg, // <-- Добавили в отправку
+    "Средний балл Г": dAvg,
     "Открытый вопрос 1": document.getElementById('open1').value,
     "Открытый вопрос 2": document.getElementById('open2').value,
-    "Открытый вопрос 3": document.getElementById('open3').value
+    "Открытый вопрос 3": document.getElementById('open3').value,
+    "Выданная рекомендация": recText // Отправляем текст рекомендации
   };
 
   try {
@@ -233,7 +257,8 @@ document.getElementById("csv").addEventListener("click",()=>{
  rows.push(["Открытый вопрос 3", document.getElementById("open3").value]);
  
  computed.forEach(([n,x])=>rows.push(["Расчёт: "+n,x]));
- rows.push(["Расчёт: Средний балл Г (выгорание)", dAvg]); // <-- Добавили в CSV
+ rows.push(["Расчёт: Средний балл Г (выгорание)", dAvg]);
+ rows.push(["Выданная рекомендация", recText.replace(/<[^>]*>?/gm, '')]); // Очищаем от HTML-тегов для CSV
 
  const blob=new Blob(["\uFEFF"+rows.map(r=>r.map(cell).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"});
  const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="anketa_rezultaty.csv";a.click();URL.revokeObjectURL(u);
