@@ -154,9 +154,7 @@ document.getElementById("calc").addEventListener("click",()=>{
    ["Блок Б. Перфекционизм (сумма)", bSum + " — " + bText],
    ["Блок В. Страх ошибки (сумма)", cSum + " — " + cText],
    ["Блок Г. Выгорание (сумма)", dSum + " — " + dText],
-   ["Блок Г. Выгорание (средний балл)", dAvg] // <-- ВЫВОДИМ СРЕДНИЙ БАЛЛ
- ];
-
+ 
  document.getElementById("resultContent").innerHTML=computed.map(([n,x])=>`<div class="stat"><span>${n}</span><strong>${x}</strong></div>`).join("");
  document.getElementById("results").style.display="block";
  document.getElementById("status").textContent="Расчёт завершён.";
