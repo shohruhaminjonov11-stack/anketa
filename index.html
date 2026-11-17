@@ -142,6 +142,9 @@ document.getElementById("calc").addEventListener("click",()=>{
  const bSum=v.slice(0,10).reduce((a,b)=>a+b,0);
  const cSum=v.slice(10,15).reduce((a,b)=>a+b,0);
  const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
+ 
+ // Считаем средний балл для выгорания (сумма / 5)
+ const dAvg = (dSum / 5).toFixed(1).replace('.', ',');
 
  let bText=bSum<=20?"Низкий уровень":bSum<=30?"Умеренный, преимущественно «здоровый»":bSum<=40?"Выраженный, зона риска":"Высокий маладаптивный, выраженная зона риска";
  let cText=cSum<=10?"Низкий страх ошибки":cSum<=17?"Умеренный":"Высокий";
@@ -150,7 +153,8 @@ document.getElementById("calc").addEventListener("click",()=>{
  computed=[
    ["Блок Б. Перфекционизм (сумма)", bSum + " — " + bText],
    ["Блок В. Страх ошибки (сумма)", cSum + " — " + cText],
-   ["Блок Г. Выгорание (сумма)", dSum + " — " + dText]
+   ["Блок Г. Выгорание (сумма)", dSum + " — " + dText],
+   ["Блок Г. Выгорание (средний балл)", dAvg] // <-- ВЫВОДИМ СРЕДНИЙ БАЛЛ
  ];
 
  document.getElementById("resultContent").innerHTML=computed.map(([n,x])=>`<div class="stat"><span>${n}</span><strong>${x}</strong></div>`).join("");
@@ -165,8 +169,8 @@ async function sendToServer() {
   const bSum=v.slice(0,10).reduce((a,b)=>a+b,0);
   const cSum=v.slice(10,15).reduce((a,b)=>a+b,0);
   const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
+  const dAvg = (dSum / 5).toFixed(1).replace('.', ','); // <-- Средний балл выгорания
 
-  // Собираем данные
   const data = {
     access_key: "d51ca75f-869d-4579-8af4-77ff3a926687",
     subject: "Новый ответ на анкету студента",
@@ -181,6 +185,7 @@ async function sendToServer() {
     "Сумма В": cSum,
     "Блок Г (Выгорание)": v.slice(15, 20).join(', '),
     "Сумма Г": dSum,
+    "Средний балл Г": dAvg, // <-- Добавили в отправку
     "Открытый вопрос 1": document.getElementById('open1').value,
     "Открытый вопрос 2": document.getElementById('open2').value,
     "Открытый вопрос 3": document.getElementById('open3').value
@@ -211,6 +216,9 @@ document.getElementById('sendBtn').addEventListener('click', sendToServer);
 function cell(x){return '"'+String(x??"").replace(/"/g,'""')+'"'}
 document.getElementById("csv").addEventListener("click",()=>{
  const v=vals();
+ const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
+ const dAvg = (dSum / 5).toFixed(1).replace('.', ',');
+
  const rows=[["Блок/Вопрос","Ответ"]];
  rows.push(["Пол", document.querySelector('input[name="gender"]:checked')?.value || ""]);
  rows.push(["Возраст", document.getElementById("age").value]);
@@ -227,6 +235,7 @@ document.getElementById("csv").addEventListener("click",()=>{
  rows.push(["Открытый вопрос 3", document.getElementById("open3").value]);
  
  computed.forEach(([n,x])=>rows.push(["Расчёт: "+n,x]));
+ rows.push(["Расчёт: Средний балл Г (выгорание)", dAvg]); // <-- Добавили в CSV
 
  const blob=new Blob(["\uFEFF"+rows.map(r=>r.map(cell).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"});
  const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="anketa_rezultaty.csv";a.click();URL.revokeObjectURL(u);
