@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#172554">
-<title>Анкета исследования | Отличник без права на ошибку</title>
+<title>Анкета | Отличник без права на ошибку</title>
 <style>
 :root{--bg:#f3f5fa;--card:#fff;--ink:#172033;--muted:#64748b;--line:#dce3ef;--blue:#2446a6;--soft:#edf2ff;--gold:#fff8e8}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -13,10 +13,11 @@ h1{font-size:clamp(24px,5vw,34px);line-height:1.16;margin:0 0 9px}header p{margi
 h2{font-size:20px;line-height:1.25;margin:0 0 8px}.sub,.small{color:var(--muted)}.sub{font-size:14px;margin:0 0 15px}.small{font-size:12px}
 .note{background:var(--gold);border:1px solid #f1d79b;color:#634d19;border-radius:12px;padding:13px 15px;margin:14px 0}
 label.field{display:block;font-weight:600;margin:12px 0 6px}
-input[type=number],input[type=text],select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit}
+input[type=number],input[type=text],select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;resize:vertical}
+.radio-group{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.radio-group label{display:flex;align-items:center;gap:6px;font-weight:400;cursor:pointer}
 .q{padding:15px 0;border-top:1px solid var(--line)}.q:first-child{border-top:0}.q p{margin:0 0 11px;font-weight:550}
-.scale{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.scale.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
 .opt{position:relative}.opt input{position:absolute;opacity:0}.opt span{display:flex;align-items:center;justify-content:center;min-height:42px;border:1px solid var(--line);border-radius:9px;background:white;cursor:pointer;font-weight:650}
 .opt input:checked+span{background:var(--soft);border:2px solid var(--blue);color:var(--blue)}.opt input:focus-visible+span{outline:3px solid #9bb6ff}
 .legend{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px;margin-top:6px}
@@ -24,150 +25,165 @@ button{border:0;border-radius:11px;padding:13px 17px;font:600 15px system-ui;cur
 button:disabled{opacity:.45;cursor:not-allowed}.progress{height:8px;background:#e5eaf4;border-radius:99px;overflow:hidden;margin:12px 0}.progress div{height:100%;width:0;background:#4263c7}
 .result{display:none}.stat{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line)}.stat strong{font-variant-numeric:tabular-nums;text-align:right}
 footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
-@media(max-width:480px){main{padding:10px 9px 40px}.card{padding:15px}.scale,.scale.five{gap:4px}.opt span{min-height:39px;font-size:13px}.legend{font-size:10px}}
+@media(max-width:480px){main{padding:10px 9px 40px}.card{padding:15px}.scale{gap:4px}.opt span{min-height:39px;font-size:13px}.legend{font-size:10px}}
 </style></head>
 <body><main>
-<header><h1>Отличник без права на ошибку</h1><p>Анонимная исследовательская анкета о перфекционизме, отношении к ошибкам, учебном истощении и адаптации студентов медицинского вуза</p></header>
-<div class="note"><b>Участие добровольное.</b> Не указывайте ФИО, телефон, адрес и другие идентифицирующие сведения. Анкета не является диагностикой и не заменяет консультацию специалиста. Ответы остаются в этом браузере до скачивания файла: на сервер они не отправляются.</div>
+<header><h1>Анкета</h1><p>Уважаемый студент! Мы проводим учебное исследование о том, как первокурсники-медики относятся к учёбе, ошибкам и собственным требованиям к себе.</p></header>
+<div class="note"><b>Анкета анонимная.</b> Результаты используются только в обобщённом виде. Пожалуйста, отметьте вариант, который лучше всего описывает вас за последний месяц. Здесь нет «правильных» ответов. Ответы отправляются напрямую исследователю.</div>
 
-<section class="card"><h2>Сведения об участнике</h2><p class="sub">Необязательные общие сведения. Не вводите данные, по которым вас можно идентифицировать.</p>
-<label class="field" for="age">Возраст (полных лет, необязательно)</label><input id="age" type="number" min="15" max="99" placeholder="Например, 18">
-<label class="field" for="course">Курс обучения</label><select id="course"><option value="">Не указывать</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
-<label class="field" for="program">Направление подготовки (необязательно)</label><input id="program" type="text" maxlength="80" placeholder="Например, Лечебное дело">
-<label style="display:block;margin-top:15px;font-weight:500"><input id="consent" type="checkbox"> Я добровольно соглашаюсь принять участие в анонимном исследовании.</label></section>
+<section class="card"><h2>Блок А. Паспортная часть</h2>
+<label style="display:block;margin-top:15px;font-weight:500"><input id="consent" type="checkbox"> Я согласен(на) на участие в анонимном исследовании.</label>
 
-<section class="card"><h2>Раздел 1. Перфекционизм</h2><p class="sub">Краткий дифференциальный тест перфекционизма (КДТП), А. А. Золотарёва. 14 утверждений. Оцените степень согласия по шкале от 1 до 7.</p><p class="small">1 — полностью не согласен; 7 — полностью согласен.</p><div id="perfection"></div></section>
-<section class="card"><h2>Раздел 2. Отношение к ошибкам</h2><p class="sub">Пять авторских утверждений, разработанных для настоящего исследования. Шкала от 1 до 5.</p><p class="small">1 — совершенно не согласен; 5 — полностью согласен.</p><div id="errors"></div></section>
-<section class="card"><h2>Раздел 3. Учебное истощение</h2><p class="sub">Русская версия Copenhagen Burnout Inventory – Student Survey (R-CBI-S), 25 утверждений. Выберите частоту, с которой вы испытываете описанное состояние.</p><p class="small">Всегда · Часто · Иногда · Редко · Никогда.</p><div id="burnout"></div></section>
-<section class="card"><h2>Раздел 4. Адаптация к медицинскому образованию</h2><p class="sub">Пять авторских утверждений для предварительной оценки субъективного опыта адаптации. Шкала от 1 до 5.</p><p class="small">1 — совершенно не согласен; 5 — полностью согласен.</p><div id="adapt"></div></section>
+<label class="field">1. Пол:</label>
+<div class="radio-group">
+  <label><input type="radio" name="gender" value="мужской"> мужской</label>
+  <label><input type="radio" name="gender" value="женский"> женский</label>
+</div>
 
-<section class="card"><h2>Завершение</h2><p class="sub">После ответа на все 49 утверждений станет доступен расчёт показателей и скачивание файла с ответами.</p><div class="progress"><div id="bar"></div></div><p class="small" id="progressText">Отвечено: 0 из 49</p><button class="primary" id="calc" disabled>Рассчитать результаты</button><p id="status" class="small" role="status"></p></section>
-<section class="card result" id="results" aria-live="polite"><h2>Результаты</h2><p class="sub">Сводка по шкалам. Не является индивидуальным психологическим заключением.</p><div id="resultContent"></div><button class="secondary" id="csv">Скачать ответы и расчёты (CSV)</button><button class="secondary" id="summary">Скопировать сводку</button><button class="primary" id="sendBtn" style="background: #2446a6; margin-top: 10px; width: 100%; border-radius: 11px; padding: 13px; color: white; border: none; font-weight: 600; cursor: pointer;">Отправить ответы исследователю</button><p class="small">Для общего анализа соберите файлы всех участников в одну таблицу. Не интерпретируйте единичный результат как диагноз.</p></section>
+<label class="field" for="age">2. Возраст:</label><input id="age" type="number" min="15" max="99" placeholder="____ лет">
 
-<section class="card"><h2>Методики и источники</h2>
-<p class="small">КДТП: Золотарёва А. А. (2018). «Краткий дифференциальный тест перфекционизма: проверка кросс-культурной устойчивости факторной структуры и психометрических характеристик». <a href="https://psyjournals.ru/journals/chp/archive/2018_n1/Zolotareva" target="_blank" rel="noopener">Статья и описание методики</a>.</p>
-<p class="small">R-CBI-S: Bolatov A. K. et al. (2021). “Psychometric Properties of the Copenhagen Burnout Inventory in a Sample of Medical Students in Kazakhstan”. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9939042/" target="_blank" rel="noopener">Полный текст и русская версия шкалы</a>.</p>
-<p class="small">Авторские блоки отношения к ошибкам и адаптации не являются валидизированными шкалами. Перед основным исследованием необходимы экспертная оценка и пилотирование.</p></section>
-<footer>Исследовательский прототип. Расчёты выполняются локально в браузере.</footer>
+<label class="field">3. Форма обучения:</label>
+<div class="radio-group">
+  <label><input type="radio" name="study_form" value="бюджет"> бюджет</label>
+  <label><input type="radio" name="study_form" value="платно"> платно</label>
+</div>
+
+<label class="field">4. Средний балл за последнюю сессию:</label>
+<div class="radio-group">
+  <label><input type="radio" name="gpa" value="5,0"> 5,0</label>
+  <label><input type="radio" name="gpa" value="4,5–4,9"> 4,5–4,9</label>
+  <label><input type="radio" name="gpa" value="4,0–4,4"> 4,0–4,4</label>
+  <label><input type="radio" name="gpa" value="ниже 4,0"> ниже 4,0</label>
+</div>
+
+<label class="field">5. Совмещаете ли учёбу с работой:</label>
+<div class="radio-group">
+  <label><input type="radio" name="work" value="нет"> нет</label>
+  <label><input type="radio" name="work" value="да, occasionally"> да, occasionally</label>
+  <label><input type="radio" name="work" value="да, постоянно"> да, постоянно</label>
+</div>
+</section>
+
+<section class="card"><h2>Блок Б. Шкала перфекционизма</h2><p class="sub">Оцените каждое утверждение от 1 до 5.</p><p class="small">1 — совершенно не согласен; 5 — полностью согласен.</p><div id="perfection"></div></section>
+
+<section class="card"><h2>Блок В. Страх ошибки</h2><p class="sub">Оцените каждое утверждение от 1 до 5.</p><div id="errors"></div></section>
+
+<section class="card"><h2>Блок Г. Признаки академического выгорания</h2><p class="sub">Оцените каждое утверждение от 1 до 5.</p><div id="burnout"></div></section>
+
+<section class="card"><h2>Блок Д. Открытые вопросы (по желанию)</h2>
+<label class="field" for="open1">1. Что для вас означает «учиться хорошо»?</label>
+<textarea id="open1" rows="2"></textarea>
+<label class="field" for="open2">2. Как вы обычно реагируете на собственную ошибку?</label>
+<textarea id="open2" rows="2"></textarea>
+<label class="field" for="open3">3. Что помогает вам справляться с тревогой перед экзаменом?</label>
+<textarea id="open3" rows="2"></textarea>
+</section>
+
+<section class="card"><h2>Завершение</h2><p class="sub">После ответа на все 20 утверждений станет доступен расчёт показателей.</p><div class="progress"><div id="bar"></div></div><p class="small" id="progressText">Отвечено: 0 из 20</p><button class="primary" id="calc" disabled>Рассчитать результаты</button><p id="status" class="small" role="status"></p></section>
+
+<section class="card result" id="results" aria-live="polite"><h2>Результаты</h2><p class="sub">Сводка по шкалам. Не является индивидуальным психологическим заключением.</p><div id="resultContent"></div>
+<button class="primary" id="sendBtn" style="background: #2446a6; margin-top: 10px;">Отправить ответы исследователю</button>
+<button class="secondary" id="csv">Скачать ответы (CSV)</button>
+</section>
+
+<footer>Расчёты выполняются локально в браузере.</footer>
 </main>
 <script>
 const perfection=[
-"Я обладаю способностью постоянно находить возможности для самосовершенствования.",
-"Счастливым я чувствую себя только тогда, когда достигаю выдающихся успехов во всем.",
-"Я с радостью берусь за необычные дела, потому что всегда надеюсь на успех.",
-"Мне бывает трудно перейти от идеи к ее осуществлению, если я не уверен в успехе моей затеи.",
-"Я отношусь к людям, которые постоянно укоряют себя за то, что не добились выдающихся успехов в жизни.",
-"Трудную жизненную ситуацию я воспринимаю как возможность для личностного роста.",
-"Я считаю себя человеком с активной жизненной позицией, позволяющей мне добиваться выдающихся успехов во всех сферах жизни.",
-"Временами я откладываю начало нового дела, потому что испытываю страх перед неудачей.",
-"Я не огорчаюсь, когда думаю о том, что есть люди гораздо удачливее меня.",
-"Новые идеи и знания я воспринимаю с интересом, потому что они могут помочь мне добиться успеха.",
-"Я всегда рад критике в свой адрес, если она помогает мне достичь совершенства.",
-"Нередко я так увлекаюсь какой-либо труднодостижимой целью, что не могу радоваться промежуточным результатам.",
-"Для меня неудача в деле — это прежде всего опыт, который в другой ситуации поможет мне добиться успеха.",
-"Любую неудачу, даже самую незначительную, я воспринимаю как поражение."
+"Я ставлю перед собой очень высокие цели, даже если они труднодостижимы",
+"Если я получил не максимальный балл, я считаю результат неудачей",
+"Мне трудно простить себе ошибку, даже если её никто не заметил",
+"Я откладываю дела, если не уверен, что выполню их идеально",
+"Мне важно, чтобы окружающие считали меня отличником",
+"Я сравниваю свои результаты с результатами более успешных студентов",
+"Я переделываю работу несколько раз, даже когда она уже достаточно хороша",
+"Критика воспринимается мной как личная неудача",
+"Я боюсь задавать вопросы, чтобы не выглядеть некомпетентным",
+"Я чувствую тревогу, если не контролирую всё до мелочей"
 ];
 const errors=[
-"Иногда я воспринимаю учебную неудачу не как отдельную ситуацию, а как свидетельство того, что мои способности переоценены.",
-"Мне сложнее задавать вопрос преподавателю, если я предполагаю, что ответ на него должен быть мне уже известен.",
-"Мне бывает трудно отделить оценку моей учебной работы от оценки меня самого как будущего специалиста.",
-"Иногда я предпочитаю не демонстрировать свои знания, если не уверен, что смогу ответить безошибочно.",
-"Я могу потратить непропорционально много времени на подготовку к одному заданию, если не уверен, что смогу выполнить его без ошибок."
+"Я боюсь ошибиться на зачёте или экзамене больше, чем не знать материал",
+"После ошибки я долго прокручиваю её в голове",
+"Я избегаю заданий, где могу показать слабый результат",
+"Мне страшно выступать публично из-за страха ошибиться",
+"Ошибка для меня — это подтверждение моей несостоятельности"
 ];
 const burnout=[
-"Как часто Вы чувствуете усталость?",
-"Как часто Вы физически истощены?",
-"Как часто Вы эмоционально истощены?",
-"Как часто Вы думаете: «Я не могу больше этого терпеть»?",
-"Как часто Вы чувствуете себя измотанным?",
-"Как часто Вы чувствуете себя слабым и восприимчивым к болезни?",
-"Чувствуете ли Вы усталость в конце учебного дня?",
-"Вы чувствуете истощенность по утрам от мыслей о новом дне на учебе?",
-"Вы чувствуете, что каждый учебный час утомляет Вас?",
-"У Вас достаточно энергии для семьи и друзей в свободное время?",
-"Является ли Ваша учеба эмоционально истощающей?",
-"Расстраивает ли Вас ваша учеба?",
-"Вы чувствуете себя выгоревшим из-за учебы?",
-"Вам тяжело работать с коллегами?",
-"Вы тратите силы на работу с коллегами?",
-"Вам неприятно работать с коллегами?",
-"Вы чувствуете, что отдаете больше, чем получаете, когда работаете с коллегами?",
-"Вы устали работать с коллегами?",
-"Вы иногда задаетесь вопросом, как долго вы сможете продолжать работать с коллегами?",
-"Вам тяжело работать с преподавателем?",
-"Вы тратите силы на работу с преподавателем?",
-"Вам неприятно работать с преподавателем?",
-"Вы чувствуете, что отдаете больше, чем получаете, когда работаете с преподавателем?",
-"Вы устали работать с преподавателем?",
-"Вы иногда задаетесь вопросом, как долго вы сможете продолжать работать с преподавателем?"
+"К концу дня я чувствую себя эмоционально истощённым",
+"Мне стало труднее находить интерес в учёбе",
+"Я сомневаюсь, что смогу справляться с нагрузкой до конца семестра",
+"Я чувствую раздражение из-за требований преподавателей",
+"Утром мне трудно заставить себя идти на занятия"
 ];
-const adapt=[
-"Мне удалось выработать реалистичный способ распределять время между занятиями, самостоятельной подготовкой и отдыхом.",
-"Когда учебная нагрузка становится чрезмерной, я понимаю, к кому или куда могу обратиться за поддержкой.",
-"Я постепенно нахожу собственный способ учиться в условиях большого объёма информации, а не только пытаюсь копировать чужие методы.",
-"Я чувствую себя достаточно свободно, чтобы признать, что не понял тему, и попросить о помощи.",
-"Несмотря на сложности первого этапа обучения, я ощущаю, что становлюсь частью университетской и будущей профессиональной среды."
-];
-function render(id,items,prefix,max,labels){
- document.getElementById(id).innerHTML=items.map((q,i)=>`<div class="q"><p>${i+1}. ${q}</p><div class="scale ${max===5?'five':''}">${Array.from({length:max},(_,j)=>j+1).map(n=>`<label class="opt" title="${labels[n-1]}"><input type="radio" name="${prefix}${i+1}" value="${n}"><span>${n}</span></label>`).join("")}</div><div class="legend"><span>${labels[0]}</span><span>${labels[max-1]}</span></div></div>`).join("");
+
+function render(id,items,prefix){
+ document.getElementById(id).innerHTML=items.map((q,i)=>`<div class="q"><p>${i+1}. ${q}</p><div class="scale">${[1,2,3,4,5].map(n=>`<label class="opt"><input type="radio" name="${prefix}${i+1}" value="${n}"><span>${n}</span></label>`).join("")}</div><div class="legend"><span>Совершенно не согласен</span><span>Полностью согласен</span></div></div>`).join("");
 }
-render("perfection",perfection,"P",7,["Полностью не согласен","","","","","","Полностью согласен"]);
-render("errors",errors,"E",5,["Совершенно не согласен","","","","Полностью согласен"]);
-render("burnout",burnout,"C",5,["Всегда","Часто","Иногда","Редко","Никогда"]);
-render("adapt",adapt,"A",5,["Совершенно не согласен","","","","Полностью согласен"]);
-const names=[...perfection.map((_,i)=>"P"+(i+1)),...errors.map((_,i)=>"E"+(i+1)),...burnout.map((_,i)=>"C"+(i+1)),...adapt.map((_,i)=>"A"+(i+1))];
+render("perfection",perfection,"B");
+render("errors",errors,"C");
+render("burnout",burnout,"D");
+
+const names=[...perfection.map((_,i)=>"B"+(i+1)),...errors.map((_,i)=>"C"+(i+1)),...burnout.map((_,i)=>"D"+(i+1))];
+
 function vals(){return names.map(n=>{let e=document.querySelector(`input[name="${n}"]:checked`);return e?+e.value:null})}
-function update(){let v=vals(),n=v.filter(x=>x!==null).length;document.getElementById("progressText").textContent=`Отвечено: ${n} из ${names.length}`;document.getElementById("bar").style.width=n/names.length*100+"%";document.getElementById("calc").disabled=n!==names.length||!document.getElementById("consent").checked}
+
+function update(){
+  let v=vals(),n=v.filter(x=>x!==null).length;
+  document.getElementById("progressText").textContent=`Отвечено: ${n} из ${names.length}`;
+  document.getElementById("bar").style.width=n/names.length*100+"%";
+  document.getElementById("calc").disabled=n!==names.length||!document.getElementById("consent").checked;
+}
 document.addEventListener("change",update);
-const avg=a=>a.reduce((s,x)=>s+x,0)/a.length, f=x=>x.toFixed(1).replace(".",",");
-let report="",computed=[];
+
+let computed=[];
+
 document.getElementById("calc").addEventListener("click",()=>{
- const v=vals(),p=v.slice(0,14),e=v.slice(14,19),c=v.slice(19,44),a=v.slice(44,49);
- // КДТП: normal perfectionism items 1,3,6,7,10,11,13; pathological 2,4,5,8,9(reverse),12,14.
- const normal=[p[0],p[2],p[5],p[6],p[9],p[10],p[12]];
- const pathological=[p[1],p[3],p[4],p[7],8-p[8],p[11],p[13]];
- // R-CBI-S: Always=100, Frequently=75, Sometimes=50, Rarely=25, Never=0; item 10 reverse.
- const cb=c.map((x,i)=>i===9?(x-1)*25:(5-x)*25);
- const domains=[avg(cb.slice(0,6)),avg(cb.slice(6,13)),avg(cb.slice(13,19)),avg(cb.slice(19,25))];
- const domainNames=["Личное истощение","Истощение, связанное с учёбой","Истощение во взаимодействии с однокурсниками","Истощение во взаимодействии с преподавателями"];
+ const v=vals();
+ const bSum=v.slice(0,10).reduce((a,b)=>a+b,0);
+ const cSum=v.slice(10,15).reduce((a,b)=>a+b,0);
+ const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
+
+ let bText=bSum<=20?"Низкий уровень":bSum<=30?"Умеренный, преимущественно «здоровый»":bSum<=40?"Выраженный, зона риска":"Высокий маладаптивный, выраженная зона риска";
+ let cText=cSum<=10?"Низкий страх ошибки":cSum<=17?"Умеренный":"Высокий";
+ let dText=dSum<=10?"Низкий риск":dSum<=17?"Умеренный":"Высокий риск выгорания";
+
  computed=[
- ["Нормальный перфекционизм (КДТП; среднее 1–7)",avg(normal)],
- ["Патологический перфекционизм (КДТП; среднее 1–7)",avg(pathological)],
- ["Авторский блок: отношение к ошибкам (среднее 1–5)",avg(e)],
- ...domainNames.map((n,i)=>[n+" (R-CBI-S; 0–100)",domains[i]]),
- ["Общий показатель R-CBI-S (0–100)",avg(cb)],
- ["Авторский блок: адаптация (среднее 1–5)",avg(a)]
+   ["Блок Б. Перфекционизм (сумма)", bSum + " — " + bText],
+   ["Блок В. Страх ошибки (сумма)", cSum + " — " + cText],
+   ["Блок Г. Выгорание (сумма)", dSum + " — " + dText]
  ];
- report=computed.map(([n,x])=>n+": "+f(x)).join("\n");
- document.getElementById("resultContent").innerHTML=computed.map(([n,x])=>`<div class="stat"><span>${n}</span><strong>${f(x)}</strong></div>`).join("")+
- `<p class="small"><b>Примечание:</b> по R-CBI-S значения 50–74 трактуются в публикации как умеренный уровень, 75–99 — высокий, 100 — тяжёлый. Эти пороги не являются диагнозом. Для КДТП и авторских блоков здесь показаны средние ответы, а не клинические категории.</p>`;
- document.getElementById("results").style.display="block";document.getElementById("status").textContent="Расчёт завершён.";document.getElementById("results").scrollIntoView({behavior:"smooth"});
+
+ document.getElementById("resultContent").innerHTML=computed.map(([n,x])=>`<div class="stat"><span>${n}</span><strong>${x}</strong></div>`).join("");
+ document.getElementById("results").style.display="block";
+ document.getElementById("status").textContent="Расчёт завершён.";
+ document.getElementById("results").scrollIntoView({behavior:"smooth"});
 });
-function cell(x){return '"'+String(x??"").replace(/"/g,'""')+'"'}
-document.getElementById("csv").addEventListener("click",()=>{
- const v=vals(),rows=[["Раздел/вопрос","Ответ"],["Возраст",document.getElementById("age").value],["Курс",document.getElementById("course").value],["Направление",document.getElementById("program").value]];
- perfection.forEach((q,i)=>rows.push(["КДТП "+(i+1)+". "+q,v[i]]));
- errors.forEach((q,i)=>rows.push(["Авторский блок: ошибки "+(i+1)+". "+q,v[14+i]]));
- burnout.forEach((q,i)=>rows.push(["R-CBI-S "+(i+1)+". "+q,["Всегда","Часто","Иногда","Редко","Никогда"][v[19+i]-1]]));
- adapt.forEach((q,i)=>rows.push(["Авторский блок: адаптация "+(i+1)+". "+q,v[44+i]]));
- computed.forEach(([n,x])=>rows.push(["Расчёт: "+n,f(x)]));
- const blob=new Blob(["\uFEFF"+rows.map(r=>r.map(cell).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"});
- const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="anketa_otlichnik_bez_prava_na_oshibku.csv";a.click();URL.revokeObjectURL(u);
-});
-document.getElementById("summary").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(report);document.getElementById("status").textContent="Сводка скопирована."}catch(e){document.getElementById("status").textContent="Не удалось скопировать. Скачайте CSV."}});
+
+// ОТПРАВКА В WEB3FORMS
 async function sendToServer() {
   const v = vals();
+  const bSum=v.slice(0,10).reduce((a,b)=>a+b,0);
+  const cSum=v.slice(10,15).reduce((a,b)=>a+b,0);
+  const dSum=v.slice(15,20).reduce((a,b)=>a+b,0);
+
+  // Собираем данные
   const data = {
     access_key: "d51ca75f-869d-4579-8af4-77ff3a926687",
-    subject: "Новый ответ на анкету",
-    age: document.getElementById('age').value,
-    course: document.getElementById('course').value,
-    program: document.getElementById('program').value,
-    P: v.slice(0, 14).join(', '),
-    E: v.slice(14, 19).join(', '),
-    C: v.slice(19, 44).join(', '),
-    A: v.slice(44, 49).join(', '),
-    results: computed.length > 0 ? JSON.stringify(computed) : 'Не рассчитано'
+    subject: "Новый ответ на анкету студента",
+    "Пол": document.querySelector('input[name="gender"]:checked')?.value || "",
+    "Возраст": document.getElementById('age').value,
+    "Форма обучения": document.querySelector('input[name="study_form"]:checked')?.value || "",
+    "Средний балл": document.querySelector('input[name="gpa"]:checked')?.value || "",
+    "Совмещение с работой": document.querySelector('input[name="work"]:checked')?.value || "",
+    "Блок Б (Перфекционизм)": v.slice(0, 10).join(', '),
+    "Сумма Б": bSum,
+    "Блок В (Страх ошибки)": v.slice(10, 15).join(', '),
+    "Сумма В": cSum,
+    "Блок Г (Выгорание)": v.slice(15, 20).join(', '),
+    "Сумма Г": dSum,
+    "Открытый вопрос 1": document.getElementById('open1').value,
+    "Открытый вопрос 2": document.getElementById('open2').value,
+    "Открытый вопрос 3": document.getElementById('open3').value
   };
 
   try {
@@ -189,6 +205,32 @@ async function sendToServer() {
     alert('Ошибка соединения. Проверьте интернет.');
   }
 }
+document.getElementById('sendBtn').addEventListener('click', sendToServer);
 
-document.getElementById('sendBtn').addEventListener('click', sendToServer);update();
+// СКАЧИВАНИЕ CSV
+function cell(x){return '"'+String(x??"").replace(/"/g,'""')+'"'}
+document.getElementById("csv").addEventListener("click",()=>{
+ const v=vals();
+ const rows=[["Блок/Вопрос","Ответ"]];
+ rows.push(["Пол", document.querySelector('input[name="gender"]:checked')?.value || ""]);
+ rows.push(["Возраст", document.getElementById("age").value]);
+ rows.push(["Форма обучения", document.querySelector('input[name="study_form"]:checked')?.value || ""]);
+ rows.push(["Средний балл", document.querySelector('input[name="gpa"]:checked')?.value || ""]);
+ rows.push(["Совмещение с работой", document.querySelector('input[name="work"]:checked')?.value || ""]);
+
+ perfection.forEach((q,i)=>rows.push(["Б. "+(i+1)+". "+q,v[i]]));
+ errors.forEach((q,i)=>rows.push(["В. "+(i+1)+". "+q,v[10+i]]));
+ burnout.forEach((q,i)=>rows.push(["Г. "+(i+1)+". "+q,v[15+i]]));
+
+ rows.push(["Открытый вопрос 1", document.getElementById("open1").value]);
+ rows.push(["Открытый вопрос 2", document.getElementById("open2").value]);
+ rows.push(["Открытый вопрос 3", document.getElementById("open3").value]);
+ 
+ computed.forEach(([n,x])=>rows.push(["Расчёт: "+n,x]));
+
+ const blob=new Blob(["\uFEFF"+rows.map(r=>r.map(cell).join(";")).join("\r\n")],{type:"text/csv;charset=utf-8"});
+ const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="anketa_rezultaty.csv";a.click();URL.revokeObjectURL(u);
+});
+
+update();
 </script></body></html>
